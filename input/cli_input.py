@@ -1,7 +1,6 @@
-# This script is used to run the starting of the program, and is meant to get
-# data about the user, they want to create potential usernames and passwords
-
-
+# This script runs at the start of the program.
+# It collects user profile information with consent to prepare data
+# for generating potential usernames and passwords.
 
 def get_user_info():
     """

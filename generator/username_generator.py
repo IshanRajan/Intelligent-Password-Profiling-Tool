@@ -3,16 +3,74 @@
 # This output helps demonstrate how personal information can make usernames
 # predictable.
 
-from input import get_user_info
+from input.cli_input import get_user_info
 profile = get_user_info()
 
 def generate_username(profile):
-    first_name = profile["first"]
-    last_name = profile["last"]
-    nickname = profile["nick"]
-    birth_year = profile["year"]
-    hobby = profile["hobby"]
-    company = profile["company"]
+    first_name = profile["first"].lower()
+    last_name = profile["last"].lower()
+    nickname = profile["nick"].lower()
+    birth_year = profile["year"].lower()
+    hobby = profile["hobby"].lower()
+    company = profile["company"].lower()
     
-    for 
+    potential_usernames = []
+    
+    if first_name and last_name:
+        first_last = first_name + last_name
+        potential_usernames.append(first_last)
+        
+        first_initial_last = first_name[0] + last_name
+        potential_usernames.append(first_initial_last)
+        
+        last_initial_last = last_name + first_name[0]
+        potential_usernames.append(last_initial_last)
+        
+        first_initial_last_initial = first_name[0] + last_name[0]
+        potential_usernames.append(first_initial_last_initial)
+        
+        last_initial_first_initial = last_name[0] + first_name[0]
+        potential_usernames.append(last_initial_first_initial)
+    
+    if nickname:
+        potential_usernames.append(nickname)
+    
+    if first_name and birth_year and nickname and last_name:
+        first_name_year = first_name + birth_year
+        potential_usernames.append(first_name_year)
+        
+        nickname_year = nickname + birth_year
+        potential_usernames.append(nickname_year)
+        
+        last_name_year = last_name + birth_year
+        potential_usernames.append(last_name_year)
+    
+    if first_name and hobby:
+        first_name_hobby = first_name + hobby
+        potential_usernames.append(first_name_hobby)
+        
+        first_name_company = first_name + company
+        potential_usernames.append(first_name_company)
+        
+        nickname_hobby = nickname + hobby
+        potential_usernames.append(nickname_hobby)
+    
+    if hobby and birth_year and company and first_name:
+        
+        hobby_year = hobby + birth_year
+        potential_usernames.append(hobby_year)
+        
+        company_year = company + birth_year
+        potential_usernames.append(company_year)
+        
+        first_initial_company = first_name[0] + hobby
+        potential_usernames.append(first_initial_company)
+        
+        
+
+
+    
+    
+        
+        
     

@@ -35,7 +35,7 @@ def generate_username(profile):
     if nickname:
         potential_usernames.append(nickname)
     
-    if first_name and birth_year and nickname and last_name:
+    if first_name and birth_year:
         first_name_year = first_name + birth_year
         potential_usernames.append(first_name_year)
         
@@ -55,7 +55,7 @@ def generate_username(profile):
         nickname_hobby = nickname + hobby
         potential_usernames.append(nickname_hobby)
     
-    if hobby and birth_year and company and first_name:
+    if hobby and birth_year:
         
         hobby_year = hobby + birth_year
         potential_usernames.append(hobby_year)
@@ -63,8 +63,17 @@ def generate_username(profile):
         company_year = company + birth_year
         potential_usernames.append(company_year)
         
-        first_initial_company = first_name[0] + hobby
-        potential_usernames.append(first_initial_company)
+        first_initial_hobby = first_name[0] + hobby
+        potential_usernames.append(first_initial_hobby)
+    
+    potential_usernames = sorted(list(set(potential_usernames)))
+    return potential_usernames
+
+    
+if __name__ == "__main__":
+    usernames = generate_username(profile)
+    print(usernames)
+
         
         
 

@@ -69,9 +69,25 @@ def generate_username(profile):
     potential_usernames = sorted(list(set(potential_usernames)))
     return potential_usernames
 
+def expand_username_variations(base_usernames, profile):
+    first_name = profile["first"].lower()
+    last_name = profile["last"].lower()
+    nickname = profile["nick"].lower()
+    birth_year = profile["year"].lower()
+    hobby = profile["hobby"].lower()
+    company = profile["company"].lower()
+    
+    all_variations = []
+    for item in base_usernames:
+        if first_name in item and last_name in item:
+            first_last =  item.replace(first_name + last_name ,first_name + "_" + last_name)
+            
+        
+
     
 if __name__ == "__main__":
     usernames = generate_username(profile)
+    usernames_variations = expand_username_variations(usernames)
     print(usernames)
 
         

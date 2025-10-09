@@ -81,10 +81,10 @@ def expand_username_variations(base_usernames, profile):
     for item in base_usernames:
         if first_name in item and last_name in item:
             first_last =  item.replace(first_name + last_name ,first_name + "_" + last_name)
+            all_variations.append(first_last)
             
-        
+            first_last = item.replace(first_name + "_" + )
 
-    
 if __name__ == "__main__":
     usernames = generate_username(profile)
     usernames_variations = expand_username_variations(usernames)

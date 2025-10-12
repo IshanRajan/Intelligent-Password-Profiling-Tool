@@ -83,7 +83,11 @@ def expand_username_variations(base_usernames, profile):
             first_last =  item.replace(first_name + last_name ,first_name + "_" + last_name)
             all_variations.append(first_last)
             
-            first_last = item.replace(first_name + "_" + )
+            first_last = item.replace(first_name + last_name, first_name + "." + last_name )
+            all_variations.append(first_last)
+            
+            first_last = item.replace(first_name + last_name, first_name + "-" + last_name)
+            all_variations.append(first_last)
 
 if __name__ == "__main__":
     usernames = generate_username(profile)

@@ -45,15 +45,15 @@ def get_user_info():
     
     consent = input("Please type 'I CONSENT' to use this tool: ")
     if consent != "I CONSENT":
-        print("Sorry you can't run the program")
+        print("Consent not provided. Exiting program.")
         exit()
 
-    first_name = input("Input the first name, if no last name enter null")
-    last_name = input("Input the last name, if no last name enter null")
-    nickname = input("Input the nickname, if no nickname enter null")
-    birth_year = input("Input the birth_year, if no birth_year enter null")
-    hobby = input("Input the hobby, if no hobby enter null")
-    company = input("Input the company, if no company enter null")
+    first_name = input("Input the first name (or 'null' if none): ").strip()
+    last_name = input("Input the last name (or 'null' if none): ").strip()
+    nickname = input("Input the nickname (or 'null' if none): ").strip()
+    birth_year = input("Input the birth_year (or 'null' if none): ").strip()
+    hobby = input("Input the hobby (or 'null' if none): ").strip()
+    company = input("Input the company (or 'null' if none): ").strip()
     user_info = {
     "first": first_name,
     "last": last_name,

@@ -3,6 +3,11 @@ from input.cli_input import get_user_info
 profile = get_user_info()
 
 def generate_passwords(profile):
+    """
+    Generate common password patterns using basic personal info.
+    Includes separators, number suffixes, and symbol-based variations.
+    """
+
     first_name = profile["first"].lower()
     last_name = profile["last"].lower()
     nickname = profile["nick"].lower()
@@ -12,7 +17,7 @@ def generate_passwords(profile):
     
     passwords = []
     
-    if first_name and last_name and birth_year and nickname:
+    if first_name and birth_year:
         first_name_birth_year = first_name + birth_year
         passwords.append(first_name_birth_year)
         
@@ -28,7 +33,7 @@ def generate_passwords(profile):
         first_name_last_initial_birth_year = first_name + last_name[0] + birth_year
         passwords.append(first_name_last_initial_birth_year)
     
-    if first_name and last_name and hobby and nickname and company:
+    if first_name and last_name and company:
         first_name_last_name = first_name + "!" + last_name
         passwords.append(first_name_last_name)
         
@@ -51,8 +56,8 @@ def generate_passwords(profile):
         first_name_123 = first_name + "123"
         passwords.append(first_name_123)
         
-        first_name = first_name + "!"
-        passwords.append(first_name)
+        first_name_exclaim = first_name + "!"
+        passwords.append(first_name_exclaim)
         
         first_name_1 = first_name + "1"
         passwords.append(first_name_1)
@@ -78,8 +83,23 @@ def generate_passwords(profile):
         first_name_hobby_birth_year = first_name + hobby + birth_year
         passwords.append(first_name_hobby_birth_year)
         
-        nickname = nickname + "007"
-        passwords.append(nickname)
+        nickname_007 = nickname + "007"
+        passwords.append(nickname_007)
+        
+        company_123 = company + "123"
+        passwords.append(company_123)
+        
+        nickname_123 = nickname + "123"
+        passwords.append(nickname_123)
+        
+        nickname_exclaim = nickname + "!"
+        passwords.append(nickname_exclaim)
+        
+        first_name_company = first_name + "@" + company
+        passwords.append(first_name_company)
+
+    passwords = sorted(list(set(passwords)))
+    return passwords
         
         
         

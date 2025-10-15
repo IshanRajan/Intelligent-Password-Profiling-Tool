@@ -73,6 +73,13 @@ def generate_passwords(profile):
         passwords.append(nickname_hobby)
         
         first_name_company_2025 = first_name + company + "2025"
+        passwords.append(first_name_company_2025)
+        
+        first_name_hobby_birth_year = first_name + hobby + birth_year
+        passwords.append(first_name_hobby_birth_year)
+        
+        nickname = nickname + "007"
+        passwords.append(nickname)
         
         
         

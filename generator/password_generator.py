@@ -17,6 +17,7 @@ def generate_passwords(profile):
     
     passwords = []
     
+    # --- Year-based patterns ---
     if first_name and birth_year:
         first_name_birth_year = first_name + birth_year
         passwords.append(first_name_birth_year)
@@ -32,7 +33,8 @@ def generate_passwords(profile):
         
         first_name_last_initial_birth_year = first_name + last_name[0] + birth_year
         passwords.append(first_name_last_initial_birth_year)
-    
+        
+    # --- Company and hobby patterns ---
     if first_name and last_name and company:
         first_name_last_name = first_name + "!" + last_name
         passwords.append(first_name_last_name)
@@ -49,12 +51,10 @@ def generate_passwords(profile):
         last_name_first_name = last_name + "." + first_name
         passwords.append(last_name_first_name)
     
+    # --- Mixed + numeric variations ---
     if first_name and hobby and nickname and company and birth_year:
         first_name_hobby = first_name + hobby
         passwords.append(first_name_hobby)
-        
-        first_name_123 = first_name + "123"
-        passwords.append(first_name_123)
         
         first_name_exclaim = first_name + "!"
         passwords.append(first_name_exclaim)

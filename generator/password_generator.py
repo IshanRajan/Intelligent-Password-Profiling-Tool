@@ -1,13 +1,47 @@
 from input.cli_input import get_user_info
 
-profile = get_user_info()
-
 def generate_passwords(profile):
     """
-    Generate common password patterns using basic personal info.
-    Includes separators, number suffixes, and symbol-based variations.
-    """
+    Generate common password patterns using personal information.
 
+    This function creates a variety of password combinations based on a user's
+    provided profile data, such as first name, last name, nickname, birth year,
+    hobby, and company. It simulates how predictable passwords are often formed
+    from personal info, helping demonstrate weak password practices.
+
+    The function builds combinations using:
+        - Names and years (e.g., "john1999", "jdoe2000")
+        - Separators like !, @, _, ., and #
+        - Common numeric suffixes (e.g., 1, 12, 123, 1234, 007, 2025)
+        - Mixed terms including hobbies and companies (e.g., "john_soccer", "jane@google")
+
+    Args:
+        profile (dict): A dictionary containing user profile fields:
+            {
+                'first': str,   # First name or 'null'
+                'last': str,    # Last name or 'null'
+                'nick': str,    # Nickname or 'null'
+                'year': str,    # Birth year or 'null'
+                'hobby': str,   # Hobby or 'null'
+                'company': str  # Company or 'null'
+            }
+
+    Returns:
+        list: A sorted list of unique password strings based on the given inputs.
+
+    Example:
+        >>> profile = {
+        ...     "first": "John",
+        ...     "last": "Smith",
+        ...     "nick": "Johnny",
+        ...     "year": "1999",
+        ...     "hobby": "soccer",
+        ...     "company": "Google"
+        ... }
+        >>> generate_passwords(profile)
+        ['google123', 'john1999', 'john!smith', 'johnsoccer', 'johnny007', ...]
+    """
+    
     first_name = profile["first"].lower()
     last_name = profile["last"].lower()
     nickname = profile["nick"].lower()
@@ -100,6 +134,11 @@ def generate_passwords(profile):
 
     passwords = sorted(list(set(passwords)))
     return passwords
+
+if __name__ == "__main__":
+    profile = get_user_info()
+    passwords = generate_passwords(profile)
+    print(passwords)
         
         
         

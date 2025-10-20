@@ -6,7 +6,6 @@
 # predictable and highlight the importance of avoiding guessable naming patterns.
 
 from input.cli_input import get_user_info
-profile = get_user_info()
 
 def generate_username(profile):
     """
@@ -165,6 +164,7 @@ def expand_username_variations(base_usernames, profile):
     return(all_variations)
 
 if __name__ == "__main__":
+    profile = get_user_info()
     # Generate and expand usernames, then print results
     usernames = generate_username(profile)
     usernames_variations = expand_username_variations(usernames, profile)

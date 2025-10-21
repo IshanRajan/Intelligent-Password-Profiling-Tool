@@ -9,32 +9,37 @@ def profile_analyzer(usernames,usernames_variations, generated_passwords, profil
     hobby = profile["hobby"].lower()
     company = profile["company"].lower()
     
-    weak = []
-    for item in generated_passwords:
-        if first_name in item:
-            weak.append(item)
+    weak_passwords = []
+    medium_passwords = []
+    strong_passwords = []
+    
+    for password in generated_passwords:
+        if first_name in password:
+            weak_passwords.append(password)
         
-        if last_name in item:
-            weak.append(item)
+        if last_name in password:
+            weak_passwords.append(password)
         
-        if usernames.index(item) in item:
-            weak.append(item)
+        if birth_year in password:
+            weak_passwords.append(password)
         
-        if usernames_variations.index(item) in item:
-            weak.append(item)
+        if company in password:
+            weak_passwords.append(password)
         
-        if birth_year in item:
-            weak.append(item)
+        if hobby in password:
+            weak_passwords.append(password)
         
-        if company in item:
-            weak.append(item)
+        for username in usernames:
+            if username in password:
+                weak_passwords.append(password)
         
-        if hobby in item:
-            weak.append(item)
+        for username in usernames_variations:
+            if username in password:
+                weak_passwords.append(password)
         
-        for item in usernames:
-            if usernames in item:
-                weak.append(item)
+        if password in
+        
+        
         
             
         

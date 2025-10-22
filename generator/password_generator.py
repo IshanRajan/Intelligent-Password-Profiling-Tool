@@ -42,12 +42,12 @@ def generate_passwords(profile):
         ['google123', 'john1999', 'john!smith', 'johnsoccer', 'johnny007', ...]
     """
     
-    first_name = profile["first"].lower()
-    last_name = profile["last"].lower()
-    nickname = profile["nick"].lower()
-    birth_year = profile["year"].lower()
-    hobby = profile["hobby"].lower()
-    company = profile["company"].lower()
+    first_name = profile["first"]
+    last_name = profile["last"]
+    nickname = profile["nick"]
+    birth_year = profile["year"]
+    hobby = profile["hobby"]
+    company = profile["company"]
     
     passwords = []
     

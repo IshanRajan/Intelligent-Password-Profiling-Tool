@@ -14,6 +14,8 @@ def profile_analyzer(usernames,usernames_variations, generated_passwords, profil
     strong_passwords = []
     
     for password in generated_passwords:
+        password_score = 0
+        
         if first_name in password:
             weak_passwords.append(password)
         
@@ -37,7 +39,19 @@ def profile_analyzer(usernames,usernames_variations, generated_passwords, profil
             if username in password:
                 weak_passwords.append(password)
         
-        if password in
+        if len(password) > 12:
+            password_score = 3
+        
+        elif 8<=len(password)<=12:
+            password_score = 2
+        
+        else:
+            password_score = 1
+        
+        if 
+            
+        
+        
         
         
         

@@ -32,11 +32,11 @@ def profile_analyzer(usernames,usernames_variations, generated_passwords, profil
             weak_passwords.append(password)
         
         for username in usernames:
-            if username in password:
+            if username.lower() in password.lower():
                 weak_passwords.append(password)
         
         for username in usernames_variations:
-            if username in password:
+            if username.lower() in password.lower():
                 weak_passwords.append(password)
         
         if len(password) > 12:

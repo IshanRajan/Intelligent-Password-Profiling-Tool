@@ -45,10 +45,7 @@ def contains_special_chars_regex(password):
         # Matches any character that is NOT a letter (a-z, A-Z), digit (0-9), or space
         if re.search(r'[^a-zA-Z0-9]', char):
             count += 1
-                
-        else:
-            pass
-            
+
     if length_password == count:
         return "password contains only special characters"
             

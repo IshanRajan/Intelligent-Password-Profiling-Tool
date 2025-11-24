@@ -1,3 +1,11 @@
+# This script evaluates generated passwords against personal information 
+# (first name, last name, nickname, birth year, hobby, company) and known 
+# usernames or username variations. It scores passwords based on length, 
+# uppercase letters, numbers, special characters, and common weak patterns 
+# (e.g., "12345", "aaaaa", "abcd"). Passwords are categorized into weak, 
+# medium, strong, and very strong to highlight risks from predictable or 
+# easily guessable passwords.
+
 import re
 
 def has_uppercase_loop(password):

@@ -1,6 +1,15 @@
 import re
 
 def has_uppercase_loop(password):
+    """
+    Check if a password contains uppercase letters.
+
+    Returns:
+        True  -> password has some uppercase letters
+        False -> password has none
+        "all letters are capitalize" -> every letter is uppercase
+    """
+    
     length_password = len(password)
     count = 0
     for char in password:
@@ -20,6 +29,15 @@ def has_uppercase_loop(password):
         return True
 
 def contains_number_loop(password):
+    """
+    Check if a password contains numbers.
+
+    Returns:
+        True  -> password has some digits
+        False -> password has none
+        "password contains only numbers" -> all characters are digits
+    """
+    
     length_password = len(password)
     count = 0
     for char in password:
@@ -39,6 +57,15 @@ def contains_number_loop(password):
         return True
 
 def contains_special_chars_regex(password):
+    """
+    Check if a password contains special characters.
+
+    Returns:
+        True  -> some special characters present
+        False -> none present
+        "password contains only special characters" -> every character is special
+    """
+    
     length_password = len(password)
     count = 0
     for char in password:
@@ -56,6 +83,28 @@ def contains_special_chars_regex(password):
         return True
 
 def profile_analyzer(usernames,usernames_variations, generated_passwords, profile):
+    """
+    Analyze generated passwords based on personal information and strength rules.
+
+    Rules:
+        - If a password contains personal info (first name, last name, nickname,
+          birth year, hobby, company), it is automatically weak.
+        - If a password contains a username or username variation, it is automatically weak.
+        - Otherwise, the password is scored based on:
+              length, uppercase letters, numbers, special characters,
+              and penalties for predictable sequences.
+        - Passwords are categorized into:
+              weak, medium, strong, very strong.
+
+    Args:
+        usernames (list): direct usernames to check against
+        usernames_variations (list): modified versions of usernames
+        generated_passwords (list): passwords to evaluate
+        profile (dict): contains 'first', 'last', 'nick', 'year', 'hobby', 'company'
+
+    Returns:
+        tuple of 4 lists: (weak, medium, strong, very strong)
+    """
     
     # Normalize all input values to lowercase for consistency
     first_name = profile["first"].lower()
@@ -70,35 +119,39 @@ def profile_analyzer(usernames,usernames_variations, generated_passwords, profil
     strong_passwords = []
     very_strong_passwords = []
     
+    # Check each password the user generated
     for password in generated_passwords:
         password_score = 0
+        username_found = False
         
-        if first_name in password:
-            weak_passwords.append(password)
+        # If the password contains personal info (name, nickname, birth year, etc.)
+        # it is automatically considered weak. No scoring is done.
+        if any(x and x.lower() in password.lower()
+            for x in [first_name, last_name, nickname, birth_year, hobby, company]):
+                weak_passwords.append(password)
+                continue
         
-        if last_name in password:
-            weak_passwords.append(password)
-        
-        if birth_year in password:
-            weak_passwords.append(password)
-        
-        if company in password:
-            weak_passwords.append(password)
-        
-        if hobby in password:
-            weak_passwords.append(password)
-        
-        if nickname in password:
-            weak_passwords.append(password)
-        
+         # If any username appears in the password, it's immediately weak.
         for username in usernames:
             if username.lower() in password.lower():
                 weak_passwords.append(password)
+                username_found = True
+                break
         
+        if username_found:
+            continue
+        
+        # Same idea, but checking username variations
         for username in usernames_variations:
             if username.lower() in password.lower():
                 weak_passwords.append(password)
+                username_found = True
+                break
+            
+        if username_found:
+            continue
         
+        # Score based on password length
         if len(password) > 12:
             password_score += 2
         
@@ -107,34 +160,48 @@ def profile_analyzer(usernames,usernames_variations, generated_passwords, profil
         
         else:
             password_score += 0
-            
-        if has_uppercase_loop(password) == True:
+        
+        # Evaluate character types (uppercase, numbers, special chars)
+        uppercase_status = has_uppercase_loop(password)
+        number_status = contains_number_loop(password)
+        special_status = contains_special_chars_regex(password)
+        
+        # Uppercase scoring:
+        # +2 if the password has mixed cases
+        # +1 if all letters are uppercase (less ideal but still strong)    
+        if uppercase_status == True:
             password_score += 2
         
-        elif has_uppercase_loop(password) == "all letters are capitalize":
+        elif uppercase_status == "all letters are capitalize":
             password_score += 1
         
         else:
             password_score += 0
-            
-        if contains_number_loop(password) == True:
+        
+        # Number scoring:
+        # +2 if it contains at least one number
+        # 0 if it's all digits or has no digits
+        if number_status == True:
             password_score += 2
         
-        elif contains_number_loop(password) == "password contains only numbers":
+        elif number_status == "password contains only numbers":
             password_score += 0
         
         else:
             password_score += 0
         
-        if contains_special_chars_regex(password) == True:
+        # Special character scoring:
+        # +2 if it contains special characters
+        if special_status == True:
             password_score += 2
         
-        elif contains_special_chars_regex(password) == False:
+        elif special_status == False:
             password_score += 0
         
         else:
             password_score += 0
         
+        # Penalize common weak patterns
         if "aaaaa" in password:
             password_score -= 1
         
@@ -144,22 +211,24 @@ def profile_analyzer(usernames,usernames_variations, generated_passwords, profil
         if "abcd" in password:
             password_score -= 1
         
+        # Sort passwords into categories based on score
         if password_score <= 2:
             weak_passwords.append(password)
         
         elif 3 <= password_score <= 5:
             medium_passwords.append(password)
         
-        elif 7 <= password_score <= 10:
+        elif 6 <= password_score <= 8:
             strong_passwords.append(password)
         
         else:
             very_strong_passwords.append(password)
-        
-        weak_passwords = sorted(list(set(weak_passwords)))
-        medium_passwords = sorted(list(set(medium_passwords)))
-        strong_passwords = sorted(list(set(strong_passwords)))
-        very_strong_passwords = sorted(list(set(very_strong_passwords)))
+    
+    # Remove duplicates and sort results
+    weak_passwords = sorted(list(set(weak_passwords)))
+    medium_passwords = sorted(list(set(medium_passwords)))
+    strong_passwords = sorted(list(set(strong_passwords)))
+    very_strong_passwords = sorted(list(set(very_strong_passwords)))
     
     return weak_passwords, medium_passwords, strong_passwords, very_strong_passwords
         

@@ -51,4 +51,35 @@ def load_json(filepath):
         return df
 
 def load_text(filepath):
-    pass
+    """
+    Load a plain text file where each line contains six space-separated fields:
+    first name, last name, nickname, birth year, hobby, and company.
+
+    Each line is split into parts and mapped onto a fixed set of keys in this
+    order: ["first", "last", "nick", "year", "hobby", "company"].
+
+    Returns:
+        list[dict]: A list of dictionaries, one per line in the file.
+                    All values remain strings, exactly as they appear
+                    in the text file.
+
+    Notes:
+        - The function assumes every line has exactly six fields.
+        - If the file structure doesn’t match this format, the output may be
+          incorrect.
+    """
+
+    keys = ["first", "last", "nick", "year", "hobby", "company"]
+    df = []
+    with open(filepath, 'r') as data_file:
+        for line in data_file:
+            parts = line.strip().split()
+            my_dict = dict(zip(keys, parts))
+            df.append(my_dict)
+    return df
+            
+                
+                
+                
+                
+                

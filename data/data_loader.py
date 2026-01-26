@@ -76,7 +76,7 @@ def load_text(filepath):
             parts = line.strip().split()
             my_dict = dict(zip(keys, parts))
             df.append(my_dict)
-    return df
+        return df
             
                 
                 

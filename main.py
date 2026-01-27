@@ -60,24 +60,33 @@ def main():
                 else:
                     break
 
+        profile_results = []
+
         for profile in user_information:
             usernames = generate_username(profile)
             usernames_variations = expand_username_variations(
                 usernames, profile)
             passwords = generate_passwords(profile)
 
+            profile_results.append({
+                "profile": profile,
+                "username": usernames,
+                "username_variations": usernames_variations, 
+                "passwords": passwords
+            })
+
         if args.output_format == "cli":
             pass
             # Saves as a CLI
-        
+
         elif args.output_format == "json":
             pass
             # Saves as a JSON
-        
+
         elif args.output_format == "csv":
             pass
             # Saves as a CSV
-            
+
         elif args.output_format == "txt":
             pass
             # Saves as a TXT

@@ -5,6 +5,7 @@ from input.cli_input import get_user_info
 from data.data_loader import load_csv, load_json, load_text
 from generator.username_generator import generate_username, expand_username_variations
 from generator.password_generator import generate_passwords
+from reporter.report_generator import generate_report
 from pathlib import Path
 
 
@@ -74,6 +75,9 @@ def main():
                 "username_variations": usernames_variations, 
                 "passwords": passwords
             })
+        
+        output = generate_report(profile_results, args.output_format)
+        
 
         if args.output_format == "cli":
             pass

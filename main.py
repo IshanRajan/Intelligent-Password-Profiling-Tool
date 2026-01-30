@@ -76,24 +76,10 @@ def main():
                 "passwords": passwords
             })
         
-        output = generate_report(profile_results, args.output_format)
+        success = generate_report(profile_results, args.output_format)
+        if success is False:
+            print("Report generation failed!")
         
-
-        if args.output_format == "cli":
-            pass
-            # Saves as a CLI
-
-        elif args.output_format == "json":
-            pass
-            # Saves as a JSON
-
-        elif args.output_format == "csv":
-            pass
-            # Saves as a CSV
-
-        elif args.output_format == "txt":
-            pass
-            # Saves as a TXT
 
     except ValueError as e:
         print(f"Error: {e}")

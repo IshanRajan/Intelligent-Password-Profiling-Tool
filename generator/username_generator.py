@@ -7,6 +7,7 @@
 
 from input.cli_input import get_user_info
 
+
 def generate_username(profile):
     """
     Generate base username combinations derived from a user's profile.
@@ -25,67 +26,68 @@ def generate_username(profile):
     birth_year = profile["year"].lower()
     hobby = profile["hobby"].lower()
     company = profile["company"].lower()
-    
+
     potential_usernames = []
-    
+
     # --- Basic name-based combinations ---
     if first_name and last_name:
         first_last = first_name + last_name
         potential_usernames.append(first_last)
-        
+
         first_initial_last = first_name[0] + last_name
         potential_usernames.append(first_initial_last)
-        
+
         last_initial_last = last_name + first_name[0]
         potential_usernames.append(last_initial_last)
-        
+
         first_initial_last_initial = first_name[0] + last_name[0]
         potential_usernames.append(first_initial_last_initial)
-        
+
         last_initial_first_initial = last_name[0] + first_name[0]
         potential_usernames.append(last_initial_first_initial)
-    
+
     # --- Include nickname-only username ---
     if nickname:
         potential_usernames.append(nickname)
-    
+
      # --- Add year-based combinations ---
     if first_name and birth_year:
         first_name_year = first_name + birth_year
         potential_usernames.append(first_name_year)
-        
+
         nickname_year = nickname + birth_year
         potential_usernames.append(nickname_year)
-        
+
         last_name_year = last_name + birth_year
         potential_usernames.append(last_name_year)
-    
+
     # --- Hobby and company-related usernames ---
     if first_name and hobby:
         first_name_hobby = first_name + hobby
         potential_usernames.append(first_name_hobby)
-        
+
         first_name_company = first_name + company
         potential_usernames.append(first_name_company)
-        
+
         nickname_hobby = nickname + hobby
         potential_usernames.append(nickname_hobby)
-    
+
     # --- Mixed hobby/year patterns ---
     if hobby and birth_year:
-        
+
         hobby_year = hobby + birth_year
         potential_usernames.append(hobby_year)
-        
+
         company_year = company + birth_year
         potential_usernames.append(company_year)
-        
+
         first_initial_hobby = first_name[0] + hobby
         potential_usernames.append(first_initial_hobby)
-    
+
     # Remove duplicates and sort alphabetically
     potential_usernames = sorted(list(set(potential_usernames)))
     return potential_usernames
+
 
 def expand_username_variations(base_usernames, profile):
     """
@@ -100,87 +102,93 @@ def expand_username_variations(base_usernames, profile):
         list: A sorted list of expanded username variations.
     """
     # Extract user info for pattern-based logic
-    first_name = profile["first"]
-    last_name = profile["last"]
-    nickname = profile["nick"]
-    birth_year = profile["year"]
-    hobby = profile["hobby"]
-    company = profile["company"]
-    
+    first_name = profile["first"].lower()
+    last_name = profile["last"].lower()
+    nickname = profile["nick"].lower()
+    birth_year = profile["year"].lower()
+    hobby = profile["hobby"].lower()
+    company = profile["company"].lower()
+
     all_variations = []
     for item in base_usernames:
         # --- Add separator and capitalization patterns ---
         if first_name in item and last_name in item:
-            first_last =  item.replace(first_name + last_name ,first_name + "_" + last_name)
+            first_last = item.replace(
+                first_name + last_name, first_name + "_" + last_name)
             all_variations.append(first_last)
-            
-            first_last = item.replace(first_name + last_name, first_name + "." + last_name )
+
+            first_last = item.replace(
+                first_name + last_name, first_name + "." + last_name)
             all_variations.append(first_last)
-            
-            first_last = item.replace(first_name + last_name, first_name + "-" + last_name)
+
+            first_last = item.replace(
+                first_name + last_name, first_name + "-" + last_name)
             all_variations.append(first_last)
-            
-            first_last = item.replace(first_name + last_name, first_name.capitalize() + last_name.capitalize())
+
+            first_last = item.replace(
+                first_name + last_name, first_name.capitalize() + last_name.capitalize())
             all_variations.append(first_last)
-            
-            first_last = item.replace(first_name + last_name, first_name.capitalize() + "_" + last_name.capitalize())
+
+            first_last = item.replace(
+                first_name + last_name, first_name.capitalize() + "_" + last_name.capitalize())
             all_variations.append(first_last)
-            
-            first_last = item.replace(first_name + last_name, first_name.upper() + last_name.upper())
+
+            first_last = item.replace(
+                first_name + last_name, first_name.upper() + last_name.upper())
             all_variations.append(first_last)
-            
+
             # --- Prefix-based variations ---
-            the_first_last = item.replace(first_name + last_name, "thereal" + first_name + last_name)
+            the_first_last = item.replace(
+                first_name + last_name, "thereal" + first_name + last_name)
             all_variations.append(the_first_last)
-            
-            official_first_last = item.replace(first_name + last_name, "official" + first_name + last_name)
+
+            official_first_last = item.replace(
+                first_name + last_name, "official" + first_name + last_name)
             all_variations.append(official_first_last)
-            
-            its_first_last = item.replace(first_name + last_name, "its" + first_name + last_name)
+
+            its_first_last = item.replace(
+                first_name + last_name, "its" + first_name + last_name)
             all_variations.append(its_first_last)
-            
-            mr_first_last = item.replace(first_name + last_name, "mr" + first_name + last_name)
+
+            mr_first_last = item.replace(
+                first_name + last_name, "mr" + first_name + last_name)
             all_variations.append(mr_first_last)
-        
+
         # --- Add numeric suffix variants ---
         if first_name in item and last_name in item:
-            first_name_number = item.replace(first_name + last_name, first_name + last_name + "1")
+            first_name_number = item.replace(
+                first_name + last_name, first_name + last_name + "1")
             all_variations.append(first_name_number)
-            
-            first_name_number = item.replace(first_name + last_name, first_name + last_name + "12")
+
+            first_name_number = item.replace(
+                first_name + last_name, first_name + last_name + "12")
             all_variations.append(first_name_number)
-            
-            first_name_number = item.replace(first_name + last_name, first_name + last_name + "123")
+
+            first_name_number = item.replace(
+                first_name + last_name, first_name + last_name + "123")
             all_variations.append(first_name_number)
-            
-            first_name_number = item.replace(first_name + last_name, first_name + last_name + "2025")
+
+            first_name_number = item.replace(
+                first_name + last_name, first_name + last_name + "2025")
             all_variations.append(first_name_number)
-            
-            first_name_number = item.replace(first_name + last_name, first_name + last_name + birth_year)
+
+            first_name_number = item.replace(
+                first_name + last_name, first_name + last_name + birth_year)
             all_variations.append(first_name_number)
-    
-    # Remove duplicates and sort alphabetically    
+
+    # Remove duplicates and sort alphabetically
     all_variations = sorted(list(set(all_variations)))
-    return(all_variations)
+    return (all_variations)
+
 
 if __name__ == "__main__":
     profile = get_user_info()
     # Generate and expand usernames, then print results
     usernames = generate_username(profile)
     usernames_variations = expand_username_variations(usernames, profile)
-    
+
     print("\n--- Base Usernames ---")
     print(usernames)
 
     print("\n--- Expanded Username Variations ---")
     print(usernames_variations)
-
-        
-        
-
-
-    
-    
-        
-        
-    

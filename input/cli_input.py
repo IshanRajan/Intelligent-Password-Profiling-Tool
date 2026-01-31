@@ -1,65 +1,84 @@
-# This script runs at the start of the program.
-# It collects user profile information with consent to prepare data
-# for generating potential usernames and passwords.
+class InputError(Exception):
+    """Exception for user input errors."""
+    pass
+
 
 def get_user_info():
     """
-    Collects basic user profile information via CLI input with an explicit consent check.
-
-    The function first requires the user to type 'I CONSENT' to confirm ethical use.
-    If consent is not given, the program exits immediately.
-    Once consent is provided, the function prompts for optional profile fields:
-    - First name
-    - Last name
-    - Nickname
-    - Birth year
-    - Hobby
-    - Company/organization
-
-    Each field can be filled with real or synthetic data, or 'null' if not applicable.
-    The collected data is returned as a dictionary for use in username and password generation.
-
-    Returns:
-        dict: A dictionary containing the collected user profile information with keys:
-              'first', 'last', 'nick', 'year', 'hobby', 'company'.
-
-    Example:
-        >>> profile = get_user_info()
-        Please type 'I CONSENT' to use this tool: I CONSENT
-        Input the first name (or 'null' if none): John
-        Input the last name (or 'null' if none): Smith
-        Input the nickname (or 'null' if none): Johnny
-        Input the birth_year (or 'null' if none): 1990
-        Input the hobby (or 'null' if none): soccer
-        Input the company (or 'null' if none): AcmeCorp
-        >>> print(profile)
-        {
-            'first': 'John',
-            'last': 'Smith',
-            'nick': 'Johnny',
-            'year': '1990',
-            'hobby': 'soccer',
-            'company': 'AcmeCorp'
-        }
-    """
+    Collects user profile information with validation and consent.
     
-    consent = input("Please type 'I CONSENT' to use this tool: ")
-    if consent != "I CONSENT":
-        print("Consent not provided. Exiting program.")
-        exit()
-
-    first_name = input("Input the first name (or 'null' if none): ").strip()
-    last_name = input("Input the last name (or 'null' if none): ").strip()
-    nickname = input("Input the nickname (or 'null' if none): ").strip()
-    birth_year = input("Input the birth_year (or 'null' if none): ").strip()
-    hobby = input("Input the hobby (or 'null' if none): ").strip()
-    company = input("Input the company (or 'null' if none): ").strip()
-    user_info = {
-    "first": first_name,
-    "last": last_name,
-    "nick": nickname,
-    "year": birth_year,
-    "hobby": hobby,
-    "company": company
+    Returns:
+        dict: Profile information with keys: first, last, nick, year, hobby, company
+        
+    Raises:
+        InputError: If consent is not provided
+        KeyboardInterrupt: If user cancels (Ctrl+C)
+    """
+    print("\n" + "="*50)
+    print("PASSWORD PROFILING TOOL - CONSENT REQUIRED")
+    print("="*50)
+    print("This tool demonstrates how personal information")
+    print("can be used to generate predictable credentials.")
+    print("\nIMPORTANT: Only use with your own data or")
+    print("data you have explicit permission to analyze.")
+    print("="*50 + "\n")
+    
+    try:
+        consent = input("Type 'I CONSENT' to continue: ").strip()
+        
+        if consent != "I CONSENT":
+            raise InputError("Consent not provided. Cannot proceed.")
+        
+        print("\nConsent confirmed. Please provide profile information.")
+        print("(Enter 'null' for any field you want to skip)\n")
+        
+        # Collect profile fields with validation
+        first_name = input("First name: ").strip() or "null"
+        last_name = input("Last name: ").strip() or "null"
+        nickname = input("Nickname: ").strip() or "null"
+        
+        # Validate birth year
+        while True:
+            birth_year = input("Birth year (4 digits or 'null'): ").strip()
+            if birth_year.lower() == "null":
+                break
+            if birth_year.isdigit() and len(birth_year) == 4:
+                break
+            print("  Invalid year. Enter 4 digits or 'null'")
+        
+        hobby = input("Hobby: ").strip() or "null"
+        company = input("Company: ").strip() or "null"
+        
+        user_info = {
+            "first": first_name,
+            "last": last_name,
+            "nick": nickname,
+            "year": birth_year,
+            "hobby": hobby,
+            "company": company
         }
-    return user_info
+        
+        # Confirm entered information
+        print("\n" + "-"*50)
+        print("Profile Summary:")
+        for key, value in user_info.items():
+            print(f"  {key.capitalize()}: {value}")
+        print("-"*50 + "\n")
+        
+        return user_info
+        
+    except EOFError:
+        raise KeyboardInterrupt("Input cancelled (EOF)")
+    except KeyboardInterrupt:
+        print("\nInput cancelled by user")
+        raise
+
+
+if __name__ == "__main__":
+    try:
+        profile = get_user_info()
+        print("Profile created successfully!")
+    except InputError as e:
+        print(f"ERROR: {e}")
+    except KeyboardInterrupt:
+        print("\nGoodbye!")

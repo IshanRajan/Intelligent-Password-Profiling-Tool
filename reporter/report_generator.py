@@ -1,169 +1,253 @@
 import json
 import csv
+import os
+
+
+class ReportGenerationError(Exception):
+    """Exception for report generation errors."""
+    pass
 
 
 def generate_report(profile_results, output_format):
-    total_usernames = 0
-    total_username_variations = 0
-    total_passwords = 0
-    amount_of_profiles = len(profile_results)
+    """
+    Generate a report in the specified format with error handling.
 
-    for p in profile_results:
-        total_usernames += len(p["usernames"])
-        total_username_variations += len(p["username_variations"])
-        total_passwords += len(p["passwords"])
+    Args:
+        profile_results: List of profile dictionaries with results
+        output_format: Format type ('cli', 'json', 'csv', 'txt')
 
-    if output_format == "cli":
-        print("========================================\n")
-        print("Intelligent Password Profiling Tool\n")
-        print("Ethical Demonstration Report\n")
-        print("========================================\n")
+    Returns:
+        bool: True if successful, False otherwise
 
-        print("Summary\n")
-        print("-------\n")
-        print(f"Profiles processed: {amount_of_profiles}\n")
-        print(f"Total usernames generated: {total_usernames}\n")
-        print(f"Total username variations: {total_username_variations}\n")
+    Raises:
+        ReportGenerationError: If report cannot be generated
+    """
+    if not profile_results:
+        raise ReportGenerationError("No profiles to report")
 
-        counter = 0
-        for profile in profile_results:
-            profile_data = profile["profile"]
-            print("----------------------------------------\n")
-            print(f"Profile: {counter}")
-            print(
-                f"Name: {profile_data.get('first')} {profile_data.get('last')}\n")
-            print(f"Nickname: {profile_data.get('nickname')}\n")
-            print(f"Year: {profile_data.get('year')}\n")
-            print(f"Hobby: {profile_data.get('hobby')}\n")
-            print("\n----------------------------------------\n")
-            print("Fields used: first,last,nickname,year,hobby\n")
+    try:
+        if output_format == "cli":
+            return _generate_cli_report(profile_results)
+        elif output_format == "json":
+            return _generate_json_report(profile_results)
+        elif output_format == "csv":
+            return _generate_csv_report(profile_results)
+        elif output_format == "txt":
+            return _generate_txt_report(profile_results)
+        else:
+            raise ReportGenerationError(
+                f"Unknown output format: {output_format}")
 
-            print(f"Base Usernames {len(profile['usernames'])}\n")
-            print("--------------\n")
-            for usernames in profile["usernames"]:
-                print(f"{usernames}\n")
+    except ReportGenerationError:
+        raise
+    except Exception as e:
+        raise ReportGenerationError(f"Unexpected error generating report: {e}")
 
-            print(
-                f"Expand Username Variations {len(profile['username_variations'])}\n")
-            print("--------------\n")
-            for username_variation in profile["username_variations"]:
-                print(f"{username_variation}\n")
 
-            print(f"Password Candidates {len(profile['passwords'])}\n")
-            print("--------------\n")
-            for password_variation in profile["passwords"]:
-                print(f"{password_variation}\n")
+def _calculate_summary(profile_results):
+    """Calculate summary statistics for the report."""
+    total_usernames = sum(len(p.get("usernames", [])) for p in profile_results)
+    total_username_variations = sum(
+        len(p.get("username_variations", [])) for p in profile_results)
+    total_passwords = sum(len(p.get("passwords", [])) for p in profile_results)
 
-            counter += 1
+    return {
+        "profiles": len(profile_results),
+        "usernames": total_usernames,
+        "variations": total_username_variations,
+        "passwords": total_passwords
+    }
 
-        print("========================================\n")
-        print("End of report\n")
-        print("========================================\n")
 
-    elif output_format == "json":
-        output_file_path = "reports/people_expanded.json"
+def _generate_cli_report(profile_results):
+    """Generate CLI report (print to console)."""
+    summary = _calculate_summary(profile_results)
 
-        try:
-            with open(output_file_path, 'w') as fp:
-                json.dump(profile_results, fp)
+    print("=" * 50)
+    print("Intelligent Password Profiling Tool")
+    print("Ethical Demonstration Report")
+    print("=" * 50)
+    print("\nSummary")
+    print("-" * 50)
+    print(f"Profiles processed: {summary['profiles']}")
+    print(f"Total usernames: {summary['usernames']}")
+    print(f"Total variations: {summary['variations']}")
+    print(f"Total passwords: {summary['passwords']}")
 
-        except PermissionError:
-            print(
-                f"ERROR: Permission denied when writing to {output_file_path}")
-            return False
+    for idx, profile in enumerate(profile_results):
+        profile_data = profile.get("profile", {})
 
-        except Exception as e:
-            return False
+        print("\n" + "-" * 50)
+        print(f"Profile {idx + 1}")
+        print(
+            f"Name: {profile_data.get('first', 'N/A')} {profile_data.get('last', 'N/A')}")
+        print(f"Nickname: {profile_data.get('nick', 'N/A')}")
+        print(f"Year: {profile_data.get('year', 'N/A')}")
+        print(f"Hobby: {profile_data.get('hobby', 'N/A')}")
+        print("-" * 50)
 
-    elif output_format == "csv":
-        output_file_path = "reports/people_expanded.csv"
-        headers = ["first", "last", "nick", "year", "hobby", "company",
-                   "type", "value"]  # type indicates username, variation, or password
+        usernames = profile.get("usernames", [])
+        if usernames:
+            print(f"\nBase Usernames ({len(usernames)})")
+            for username in usernames:
+                print(f"  • {username}")
 
-        try:
+        variations = profile.get("username_variations", [])
+        if variations:
+            print(f"\nUsername Variations ({len(variations)})")
+            for variation in variations:
+                print(f"  • {variation}")
 
-            with open(output_file_path, 'w', newline='', encoding='utf-8') as f:
-                writer = csv.DictWriter(f, fieldnames=headers)
-                writer.writeheader()
+        passwords = profile.get("passwords", [])
+        if passwords:
+            print(f"\nPassword Candidates ({len(passwords)})")
+            for password in passwords:
+                print(f"  • {password}")
 
-                for profile in profile_results:
+        weak = profile.get("weak_passwords", [])
+        medium = profile.get("medium_passwords", [])
+        strong = profile.get("strong_passwords", [])
+        very_strong = profile.get("very_strong_passwords", [])
 
-                    for username in profile["usernames"]:
-                        writer.writerow(
-                            {"type": "username", "value": username})
+        print(f"\nPassword Analysis")
+        print("-" * 50)
 
-                    for variation in profile["username_variations"]:
-                        writer.writerow(
-                            {"type": "username_variation", "value": variation})
+        if weak:
+            print(f"\n  🔴 Weak ({len(weak)})")
+            for p in weak:
+                print(f"    • {p}")
 
-                    for password in profile["passwords"]:
-                        writer.writerow(
-                            {"type": "password", "value": password})
+        if medium:
+            print(f"\n  🟡 Medium ({len(medium)})")
+            for p in medium:
+                print(f"    • {p}")
 
-        except PermissionError:
-            print(
-                f"ERROR: Permission denied when writing to {output_file_path}")
-            return False
+        if strong:
+            print(f"\n  🟢 Strong ({len(strong)})")
+            for p in strong:
+                print(f"    • {p}")
 
-        except Exception as e:
-            return False
+        if very_strong:
+            print(f"\n  🔵 Very Strong ({len(very_strong)})")
+            for p in very_strong:
+                print(f"    • {p}")
 
-    elif output_format == "txt":
-        output_file_path = "reports/people_expanded.txt"
-        try:
-            with open(output_file_path, "w", newline="", encoding='utf-8') as f:
-                f.write("========================================\n")
-                f.write("Intelligent Password Profiling Tool\n")
-                f.write("Ethical Demonstration Report\n")
-                f.write("========================================\n")
+    print("\n" + "=" * 50)
+    print("End of Report")
+    print("=" * 50)
 
-                f.write("Summary\n")
-                f.write("-------\n")
-                f.write(f"Profiles processed: {amount_of_profiles}\n")
-                f.write(f"Total usernames generated: {total_usernames}\n")
+    return True
+
+
+def _generate_json_report(profile_results):
+    """Generate JSON report file."""
+    output_file_path = "reports/people_expanded.json"
+
+    try:
+        with open(output_file_path, 'w', encoding='utf-8') as fp:
+            json.dump(profile_results, fp, indent=2, ensure_ascii=False)
+        print(f"✓ Report saved to: {output_file_path}")
+        return True
+
+    except PermissionError:
+        raise ReportGenerationError(f"Permission denied: {output_file_path}")
+    except Exception as e:
+        raise ReportGenerationError(f"Error writing JSON: {e}")
+
+
+def _generate_csv_report(profile_results):
+    """Generate CSV report file."""
+    output_file_path = "reports/people_expanded.csv"
+    headers = ["first", "last", "nick", "year",
+               "hobby", "company", "type", "value"]
+
+    try:
+        with open(output_file_path, 'w', newline='', encoding='utf-8') as f:
+            writer = csv.DictWriter(f, fieldnames=headers)
+            writer.writeheader()
+
+            for profile in profile_results:
+                profile_data = profile.get("profile", {})
+
+                # Write usernames
+                for username in profile.get("usernames", []):
+                    row = {**profile_data, "type": "username", "value": username}
+                    writer.writerow(row)
+
+                # Write variations
+                for variation in profile.get("username_variations", []):
+                    row = {**profile_data, "type": "username_variation",
+                           "value": variation}
+                    writer.writerow(row)
+
+                # Write passwords
+                for password in profile.get("passwords", []):
+                    row = {**profile_data, "type": "password", "value": password}
+                    writer.writerow(row)
+
+        print(f"✓ Report saved to: {output_file_path}")
+        return True
+
+    except PermissionError:
+        raise ReportGenerationError(f"Permission denied: {output_file_path}")
+    except Exception as e:
+        raise ReportGenerationError(f"Error writing CSV: {e}")
+
+
+def _generate_txt_report(profile_results):
+    """Generate TXT report file."""
+    output_file_path = "reports/people_expanded.txt"
+    summary = _calculate_summary(profile_results)
+
+    try:
+        with open(output_file_path, "w", encoding='utf-8') as f:
+            f.write("=" * 50 + "\n")
+            f.write("Intelligent Password Profiling Tool\n")
+            f.write("Ethical Demonstration Report\n")
+            f.write("=" * 50 + "\n\n")
+
+            f.write("Summary\n")
+            f.write("-" * 50 + "\n")
+            f.write(f"Profiles processed: {summary['profiles']}\n")
+            f.write(f"Total usernames: {summary['usernames']}\n")
+            f.write(f"Total variations: {summary['variations']}\n")
+            f.write(f"Total passwords: {summary['passwords']}\n")
+
+            for idx, profile in enumerate(profile_results):
+                profile_data = profile.get("profile", {})
+
+                f.write("\n" + "-" * 50 + "\n")
+                f.write(f"Profile {idx + 1}\n")
                 f.write(
-                    f"Total username variations: {total_username_variations}\n")
+                    f"Name: {profile_data.get('first', 'N/A')} {profile_data.get('last', 'N/A')}\n")
+                f.write(f"Nickname: {profile_data.get('nick', 'N/A')}\n")
+                f.write(f"Year: {profile_data.get('year', 'N/A')}\n")
+                f.write(f"Hobby: {profile_data.get('hobby', 'N/A')}\n")
+                f.write("-" * 50 + "\n")
 
-                counter = 0
-                for profile in profile_results:
-                    profile_data = profile["profile"]
-                    f.write("----------------------------------------\n")
-                    f.write(f"Profile: {counter}")
-                    f.write(
-                        f"Name: {profile_data.get('first')} {profile_data.get('last')}\n")
-                    f.write(f"Nickname: {profile_data.get('nickname')}\n")
-                    f.write(f"Year: {profile_data.get('year')}\n")
-                    f.write(f"Hobby: {profile_data.get('hobby')}\n")
-                    f.write("\n----------------------------------------\n")
-                    f.write("Fields used: first,last,nickname,year,hobby\n")
+                usernames = profile.get("usernames", [])
+                f.write(f"\nBase Usernames ({len(usernames)})\n")
+                for username in usernames:
+                    f.write(f"{username}\n")
 
-                    f.write(f"Base Usernames {len(profile['usernames'])}\n")
-                    f.write("--------------\n")
-                    for usernames in profile["usernames"]:
-                        f.write(f"{usernames}\n")
+                variations = profile.get("username_variations", [])
+                f.write(f"\nUsername Variations ({len(variations)})\n")
+                for variation in variations:
+                    f.write(f"{variation}\n")
 
-                    f.write(
-                        f"Expand Username Variations {len(profile['username_variations'])}\n")
-                    f.write("--------------\n")
-                    for username_variation in profile["username_variations"]:
-                        f.write(f"{username_variation}\n")
+                passwords = profile.get("passwords", [])
+                f.write(f"\nPassword Candidates ({len(passwords)})\n")
+                for password in passwords:
+                    f.write(f"{password}\n")
 
-                    f.write(
-                        f"Password Candidates {len(profile['passwords'])}\n")
-                    f.write("--------------\n")
-                    for password_variation in profile["passwords"]:
-                        f.write(f"{password_variation}\n")
+            f.write("\n" + "=" * 50 + "\n")
+            f.write("End of Report\n")
+            f.write("=" * 50 + "\n")
 
-                    counter += 1
-                
-                print("========================================\n")
-                print("End of report\n")
-                print("========================================\n")
+        print(f"✓ Report saved to: {output_file_path}")
+        return True
 
-        except PermissionError:
-                print(
-                    f"ERROR: Permission denied when writing to {output_file_path}")
-                return False
-
-        except Exception as e:
-                return False
+    except PermissionError:
+        raise ReportGenerationError(f"Permission denied: {output_file_path}")
+    except Exception as e:
+        raise ReportGenerationError(f"Error writing TXT: {e}")

@@ -1,3 +1,6 @@
+#enjoy
+
+
 class InputError(Exception):
     """Exception for user input errors."""
     pass

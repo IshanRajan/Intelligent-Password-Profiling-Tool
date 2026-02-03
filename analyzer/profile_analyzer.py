@@ -1,3 +1,6 @@
+#enjoy
+
+
 # This script evaluates generated passwords against personal information 
 # (first name, last name, nickname, birth year, hobby, company) and known 
 # usernames or username variations. It scores passwords based on length, 

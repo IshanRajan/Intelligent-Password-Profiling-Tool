@@ -5,6 +5,8 @@
 # This output helps demonstrate how personal information can make usernames
 # predictable and highlight the importance of avoiding guessable naming patterns.
 
+#enjoy
+
 from input.cli_input import get_user_info
 
 

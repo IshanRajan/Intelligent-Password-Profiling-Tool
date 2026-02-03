@@ -1,3 +1,6 @@
+#enjoy
+
+
 from input.cli_input import get_user_info
 
 def generate_passwords(profile):

@@ -1,3 +1,6 @@
+#enjoy
+
+
 """
 Comprehensive Test Suite for Password Profiling Tool
 

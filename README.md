@@ -5,7 +5,7 @@ A Python-based educational tool that demonstrates how personal information can b
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-## ⚠️ Ethical Use Statement
+## Ethical Use Statement
 
 This tool is designed **strictly for educational purposes** to demonstrate password security vulnerabilities. It should only be used:
 
@@ -19,7 +19,7 @@ This tool is designed **strictly for educational purposes** to demonstrate passw
 - Credential stuffing attacks
 - Any malicious or illegal activities
 
-## 🎯 Purpose
+## Purpose
 
 This tool helps security professionals, educators, and individuals understand:
 
@@ -28,7 +28,7 @@ This tool helps security professionals, educators, and individuals understand:
 - Why passwords based on personal data are inherently weak
 - The importance of using password managers and truly random passwords
 
-## ✨ Features
+## Features
 
 - **Username Generation**: Creates common username patterns from personal data (first name, last name, nicknames, birth year, hobbies, company)
 - **Username Variations**: Expands base usernames with realistic variations (separators, capitalization, prefixes, numeric suffixes)
@@ -43,7 +43,7 @@ This tool helps security professionals, educators, and individuals understand:
 - **Comprehensive Error Handling**: Validates inputs and provides helpful error messages
 - **Batch Processing**: Analyze multiple profiles at once
 
-## 📋 Requirements
+## Requirements
 
 - Python 3.8 or higher
 - pip(Python package installer)
@@ -53,7 +53,7 @@ This tool helps security professionals, educators, and individuals understand:
 pandas>=1.3.0
 ```
 
-## 🚀 Installation
+## Installation
 1. **Clone the repository:**
 ```bash
 git clone https://github.com/yourusername/Intelligent-Password-Profiling-Tool.git
@@ -94,7 +94,7 @@ Intelligent-Password-Profiling-Tool/
 └── README.md                        # This file
 ```
 
-## 💻 Usage
+## Usage
 
 ### Interactive Mode
 
@@ -133,7 +133,7 @@ Options:
   -h, --help               Show help message
 ```
 
-## 📝 Input File Formats
+## Input File Formats
 
 ### CSV Format
 ```csv
@@ -177,7 +177,7 @@ Jane Smith Janey 1985 reading BookCo
 John Doe null 1990 null TechCorp
 ```
 
-## 📊 Output Examples
+## Output Examples
 
 ### CLI Output
 ```
@@ -258,7 +258,7 @@ Saved to `reports/people_expanded.csv` with columns:
 - `type` (username, username_variation, or password)
 - `value` (the actual username/password)
 
-## 🧪 Running Tests
+## Running Tests
 
 The project includes a comprehensive test suite with 26 tests covering:
 
@@ -287,7 +287,7 @@ Errors: 0
 ======================================================================
 ```
 
-## 🔒 Password Strength Scoring
+## Password Strength Scoring
 
 The tool categorizes passwords based on the following criteria:
 
@@ -323,7 +323,7 @@ Penalties:
 - **Strong**: Score 6-8
 - **Very Strong**: Score > 8
 
-## 🛠️ Advanced Configuration
+## Advanced Configuration
 
 ### Disable Python Bytecode Cache
 
@@ -356,7 +356,7 @@ find . -type d -name "__pycache__" -exec rm -rf {} +
 Get-ChildItem -Recurse -Directory -Filter __pycache__ | Remove-Item -Recurse -Force
 ```
 
-## 🐛 Troubleshooting
+## Troubleshooting
 
 ### Import Errors
 
@@ -390,7 +390,7 @@ find . -type d -name "__pycache__" -exec rm -rf {} +
 find . -name "*.pyc" -delete
 ```
 
-## 📚 Educational Use Cases
+## Educational Use Cases
 
 1. **Security Awareness Training**: Demonstrate to employees why company policies prohibit personal information in passwords
 
@@ -400,7 +400,7 @@ find . -name "*.pyc" -delete
 
 4. **Personal Security Audit**: Analyze your own passwords to identify weak patterns
 
-## 🤝 Contributing
+## Contributing
 
 Contributions are welcome! Please:
 
@@ -410,28 +410,28 @@ Contributions are welcome! Please:
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
 
-## ⚖️ Legal Disclaimer
+## Legal Disclaimer
 
 This tool is provided for educational and research purposes only. The authors and contributors are not responsible for any misuse or damage caused by this tool. Users must ensure they have proper authorization before analyzing any personal information and must comply with all applicable laws and regulations.
 
-## 👨‍💻 Author
+## Author
 
 **Ishan Rajan**
 - GitHub: [@IshanRajan28](https://github.com/IshanRajan28)
 - Email: irajan@terpmail.umd.edu
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - Built using Python and pandas
 - Inspired by common password security research
 - Thanks to the cybersecurity community for raising awareness about password vulnerabilities
 - Assisted by ChatGPT and Claude
 
-## 📈 Future Enhancements
+## Future Enhancements
 
 Potential features for future versions:
 

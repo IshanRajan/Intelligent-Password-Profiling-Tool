@@ -78,7 +78,7 @@ Intelligent-Password-Profiling-Tool/
 │   ├── __init__.py
 │   ├── username_generator.py       # Username generation logic
 │   └── password_generator.py       # Password generation logic
-├── analzyer/
+├── analyzer/
 │   ├── __init__.py
 │   └── profile_analyzer.py         # Password strength analysis
 ├── data/
@@ -365,7 +365,7 @@ Get-ChildItem -Recurse -Directory -Filter __pycache__ | Remove-Item -Recurse -Fo
 **Solution:** Ensure you're running from the project root directory and each folder has an `__init__.py` file:
 ```bash
 touch generator/__init__.py
-touch analzyer/__init__.py
+touch analyzer/__init__.py
 touch data/__init__.py
 touch reporter/__init__.py
 touch input/__init__.py
